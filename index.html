@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!--pull vue lib from cdn , and vue 3 fix some bug from vue 2-->
+
+    <div id="app">
+        <!--v-show 與 v-if的差別 在於 v-show會強制顯示 v-if不符時 將不會顯示在html文件內-->
+        <!-- <div v-if="type === '1'">{{div1}}</div>
+        <div v-else-if="type === '2'">{{div2}}</div>
+        <div v-else>{{div3}}</div> -->
+        <!--底下的key利用類似hash的情況 生成唯一的key值-->
+        <!--注意 當使用v-for="item in array" 後面要加:key=item -->
+        <!-- <div v-for="(item, i) in array1" :key="item+i">
+            {{item}}
+        </div> -->
+
+
+        <!--以下兩種 von 或 @ 皆可-->
+        <!-- <button type="button" v-on:click="click2">clickme</button>
+        <p></p>
+        <button type="button" @click="click">Hello{{user}}</button>
+        {{msg.message}} -->
+        
+        <!--因為轉譯時-->
+        <!--app中有共用number and handleClick 在此綁定與傳入  其中 :number表示綁定 counterbtn的number-->
+
+        <!--  
+            Assumption: 
+            :number is for mainpage's script ,
+            "number2" is for sub-component's intax
+        -->
+        <counter-btn  :number = "number2" @click = "handleClick"></counter-btn>
+    </div>
+
+
+
+    <!--script block----------------------------------------->
+    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+    <script type="module">
+        //必須從CDN 的vue當中的createApp拉出來建置
+        import { createApp,ref ,reactive } from "./vue.js"
+        import CounterBtn from './CounterBtn.js'
+        //const { createApp,ref ,reactive } = Vues
+        
+        const app = {
+            components:{
+                CounterBtn
+            },
+            setup() {
+                //app當中含有counter button
+                //initial時 會生成動態物件number 以及 方法handleClick
+                const number = ref(1)
+                const handleClick = ()=>{number.value+=1}
+                //const click= ()=>{number.value+=1}
+                // const div1 = 'div1'
+                // const div2 = 'div2'
+                // const div3 = 'div3'
+                // const type = '1'
+                // return {
+                //     div1,
+                //     div2,
+                //     div3,
+                //     type
+
+                // const array1 = reactive([
+                //     'div1',
+                //     'div2',
+                //     'div3'
+                // ])
+
+                // let user = ref("user")
+                // let msg = reactive({message:"msg1"})
+                //ref 僅用於基本型態 複雜的不建議 可能出錯
+
+                //function
+                // function click() {
+                //  user.value += "1"  
+                //  msg.message = "a"+msg.message
+                // }
+
+                // function click2(){
+                //     array1.push('div')
+                // }
+
+
+                return {
+                    //將ref物件 與 方法 公開共用於app內(指定ID或class範圍內)
+                    number,handleClick
+                    //array1,click,user,msg,click2
+                }
+
+
+            }
+        }
+        
+        //mount 指定 id="app"的
+        //也就是 create app for specific id or class
+        createApp(app).mount('#app')
+
+
+
+    </script>
+
+
+    <!--below code only for test.js-->
+    <!-- <script type="module">
+        //import hello from 'test.js'
+        import {hello,hello2} from './test.js'
+        alert(hello("user"))
+    </script> -->
+
+</body>
+
+</html>

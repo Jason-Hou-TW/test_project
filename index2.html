@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<header>
+    <style>
+        .div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 600px;
+            height: 600px;
+            background-color: #eee;
+        }
+    </style>
+</header>
+
+<body>
+    <div class="container pt-xl-5 px-5 align-self-center">
+        <form>
+
+            <div class="mx-auto">
+                <label for="Account" class="form-label mt-1">帳號：</label>
+                <input type="text" class="form-control-sm w-auto" id="Account" placeholder="請輸入帳號" required>
+                <label id="AccountNotice"></label>
+                <br>
+                <label for="PW" class="form-label mt-1">密碼：</label>
+                <input type="password" class="form-control-sm w-auto" id="PW" placeholder="請輸入密碼" required>
+                <label id="PWNotice"></label>
+                <br>
+                <label for="PW2" class="form-label mt-1">重複密碼：</label>
+                <input type="password" class="form-control-sm w-auto" id="PW2" name="PW2" placeholder="請重複密碼" required>
+                <label id="PW2Notice"></label>
+                <br>
+                <label for="Name" class="form-label mt-1">姓名：</label>
+                <input type="text" class="form-control-sm w-auto" id="Name" name="Name" maxlength="20"
+                    placeholder="請輸入姓名" required>
+                <label id="NameNotice"></label>
+                <br>
+                <label>性別：</label>
+                <input class="form-check-input" type="radio" name="Sex" id="Sex1">
+                <label class="form-check-label" for="Sex1">
+                    男
+                </label>
+                <input class="form-check-input" type="radio" name="Sex" id="Sex2">
+                <label class="form-check-label" for="Sex2">
+                    女
+                </label>
+                <br>
+                <label class="form-label mt-1">生日：</label>
+                <select id="BDY" class="form-control-sm" aria-label=".form-select-sm example">
+                </select><label for="BDY">年</label>
+                <select id="BDM" class="form-control-sm" aria-label=".form-select-sm example" onchange="generate_BDD()">
+                </select><label for="BDM">月</label>
+                <select id="BDD" class="form-control-sm" aria-label=".form-select-sm example">
+                </select><label for="BDD">日</label>
+                <br>
+                <label for="address" class="form-label mt-1">地址：</label>
+                <input type="text" id="address" class="form-control-sm w-auto" placeholder="請輸入地址(選填)">
+                <br>
+                <label for="phone" class="form-label mt-1">電話：</label>
+                <input type="text" id="phone" class="form-control-sm w-auto" placeholder="0912345678(選填)"
+                    maxlength="10">
+                <br>
+                <button type="button" class="btn btn-primary" onclick="check()">送出</button>
+            </div>
+        </form>
+
+    </div>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+
+
+
+    <script>
+        function generate_BDY(start, period) {
+            let end = start - period;
+            var select = document.getElementById('BDY');
+            for (var i = start; i >= end; i--) {
+                select.options[select.options.length] = new Option(i, i);
+            }
+        }
+        function generate_BDM() {
+            var select = document.getElementById('BDM');
+            for (var i = 1; i <= 12; i++) {
+                select.options[select.options.length] = new Option(i, i);
+            }
+        }
+        function generate_BDD() {
+            let days = new Date(document.getElementById("BDY").value, document.getElementById("BDM").value, 0).getDate();
+            console.log(days)
+            var select = document.getElementById('BDD');
+            while (select.options.length) { select.options.remove(0) }
+            for (var i = 1; i <= days; i++) {
+                select.options[select.options.length] = new Option(i, i);
+            }
+        }
+
+        const verify_account = () => {
+            let regex = /^\w{6,20}/;
+            if (regex.test(document.getElementById("Account").value)) {
+                document.getElementById("AccountNotice").innerText = "";
+            }
+            else {
+                document.getElementById("AccountNotice").innerText = "帳號格式錯誤";
+            }
+        }
+        const verify_pw = () => {
+            let regex = /^\w{6,20}/;
+            if (regex.test(document.getElementById("PW").value)) {
+                document.getElementById("PWNotice").innerText = "";
+            }
+            else {
+                document.getElementById("PWNotice").innerText = "密碼格式錯誤";
+            }
+        }
+        const verify_same_pw = () => {
+            if (document.getElementById("PW").value == document.getElementById("PW2").value) {
+                document.getElementById("PW2Notice").innerText = "";
+            }
+            else {
+                document.getElementById("PW2Notice").innerText = "密碼不相同";
+            }
+        }
+        function check() {
+            verify_account()
+            verify_pw()
+            verify_same_pw()
+        }
+
+        generate_BDY(new Date().getFullYear(), 30)
+        generate_BDM()
+
+        generate_BDD()
+    </script>
+</body>

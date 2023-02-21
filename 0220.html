@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <div id="app">
+        <!--component-->
+        <counter v-if="show_counter"></counter>
+        <button type="button" @click="show_counter_function">顯示</button>
+
+
+        <!--input-->
+        <label>{{text_input}}</label>
+        </br>
+        <input v-model="text_input">
+        <!-- <label>{{reverse()}}</label> -->
+        <label>{{reverse_c}}</label>
+
+
+        <!--select-->
+        <select >
+            <option v-for="o in select_option" value="o.value">{{o.text}}</option>
+        </select>
+
+        <!--counter-->
+
+    </div>
+
+
+
+    <!--  script   -->
+    <script type="module">
+        import counter from "./counter.js"
+        import { createApp, ref, reactive, computed } from "./vue.js"
+        const app = {
+            components:{
+                counter
+            },
+         setup(){
+
+            const show_counter = ref(true)
+            const show_counter_function = ()=>{
+                show_counter.value=!show_counter.value
+            }
+
+
+            //--------------
+            const text_input = ref("text_input")
+            const reverse_c = computed(()=>{
+                //注意 因為一般的function會全域渲染 但使用compute時 僅compute內的值變動時 才會重新渲染 較省效能
+                console.log('reverse')
+                return text_input.value.split('').reverse().join('')
+
+            })
+            const reverse=()=>{
+                console.log('reverse')
+                return text_input.value.split('').reverse().join('')
+            }
+
+
+            //-------------------
+            const select_value = ref("d")
+            const select_option = [
+                {text:"A",value:"a"},
+                {text:"B",value:"b"},
+                { text: "C", value: "c" }
+            ]
+            
+
+
+            //return area
+            return{
+                show_counter,show_counter_function,
+                text_input, select_value,select_option,
+                reverse,
+            }
+         } 
+        }
+        createApp(app).mount('#app')
+    </script>
+</body>
+</html>
